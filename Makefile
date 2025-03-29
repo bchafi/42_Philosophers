@@ -5,6 +5,7 @@ SOURCES = \
 	philo.c \
 	utils/ft_isdigit.c utils/ft_isspace.c utils/ft_puterror_fd.c utils/ft_split.c \
 	utils/ft_strjoin.c utils/ft_strlen.c utils/ft_strdup.c utils/ft_substr.c \
+	utils/ft_printf.c utils/ft_printf_utils.c \
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -13,7 +14,7 @@ all : $(NAME)
 $(NAME): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(NAME)
 
-%.o : %.c philo.h
+%.c : %.o
 	$(CC) $^ -c $<
 
 clean:
@@ -22,4 +23,4 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: fclean all
+re: all clean

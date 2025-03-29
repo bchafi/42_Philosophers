@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:11:20 by bader             #+#    #+#             */
-/*   Updated: 2025/03/25 01:54:23 by bader            ###   ########.fr       */
+/*   Updated: 2025/03/29 05:18:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-# include <stdlib.h>
 
 int	are_valid_argument(char *argv)
 {
@@ -77,7 +76,11 @@ char	**parcing(char **argv)
 int main(int ac, char **av)
 {
 	(void)ac;
+	if (ac < 2)
+	{
+		ft_printf("Argumenta Is Less Then Two Args!!");
+		exit(1);
+	}
 	parcing(av);
-
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:09:29 by bader             #+#    #+#             */
-/*   Updated: 2025/03/25 01:56:54 by bader            ###   ########.fr       */
+/*   Updated: 2025/03/29 05:11:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ char    *ft_strjoin(char *s1, char *s2);
 int     ft_isdigit(int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s1);
+
+# include <stdarg.h>
+int     ft_printf(const char *format, ...);
+int     ft_putchr(int c);
+int     ft_putnbr(int n);
+int     ft_putstr(const char *str);
+int     ft_hexadecimal(unsigned int num, char buffer);
+int     ft_hexa_address(unsigned long num);
 
 
 
