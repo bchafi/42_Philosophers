@@ -3,84 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:11:20 by bader             #+#    #+#             */
-/*   Updated: 2025/03/29 05:18:14 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/07 13:15:31 by bader            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	are_valid_argument(char *argv)
+t_data *init_data(t_data *data, char **args)
 {
-	while (*argv && ft_isspace((unsigned char)*argv))
-		argv++;
-	if (*argv == '\0')
-		ft_puterror_fd("An Argument Is Empty!!\n");
-	while (*argv)
+	if (!args)
 	{
-		if (ft_isspace((unsigned char)*argv) && *(argv + 1) == '\0'
-			&& ft_isspace((unsigned char)*(argv + 1)))
-			ft_puterror_fd("An Argument Is Empty!!\n");
-		argv++;
+		free(data);
+		data = NULL;
+		ft_puterror_fd("Has No Argument !!");
 	}
-	return (1);
-}
-
-void	check_if_numbers(char **args_sp)
-{
-	char	*args;
-	int		i;
-
-	i = 0;
-	while (*args_sp)
-	{
-		i = 0;
-		args = *args_sp;
-		while (args[i])
-		{
-			if (ft_isdigit(args[i]))
-				i++;
-			else if (i == 0 && args[i] == '-')
-				ft_puterror_fd("The Argument Is Negative!!\n");
-			else if ((i == 0 && args[i] == '+') && ft_isdigit(args[i + 1]))
-				i++;
-			else
-				ft_puterror_fd("The Argument Is Not A Digit!!\n");
-		}
-		args_sp++;
-	}
-}
-
-char	**parcing(char **argv)
-{
-	char	*string;
-	char	**args_philo;
-
-	argv++;
-	string = NULL;
-	while (*argv)
-	{
-		are_valid_argument(*argv);
-		string = ft_strjoin(string, *argv);
-		string = ft_strjoin(string, " ");
-		argv++;
-	}
-	args_philo = ft_split(string, ' ');
-	check_if_numbers(args_philo);
-	free(string);
-	return (args_philo);
+	data->meals_required = -1;
+	data->num_philos = ft_atoi(args[0]);
+	data->time_to_die = ft_atoi(args[1]);
+	data->time_to_eat = ft_atoi(args[2]);
+	data->time_to_sleep = ft_atoi(args[3]);
+	if (args[4])
+		data->meals_required = ft_atoi(args[4]);
+	// ft_printf("%d\n", t_args->meals_required);
+	// ft_printf("%d\n", t_args->num_philos);
+	// ft_printf("%d\n", t_args->time_to_die);
+	// ft_printf("%d\n", t_args->time_to_eat);
+	// ft_printf("%d\n", t_args->time_to_sleep);
+	return (data);
 }
 
 int main(int ac, char **av)
 {
-	(void)ac;
+	// atexit(f);
+	t_data *d_dataP;
+	t_philo *d_philo;
 	if (ac < 2)
 	{
 		ft_printf("Argumenta Is Less Then Two Args!!");
 		exit(1);
 	}
-	parcing(av);
+
+	av = parcing(av);
+	d_dataP = malloc(sizeof(t_data));
+	if (!d_dataP)
+		exit(1);
+	d_dataP = init_data(d_dataP, av);
+	d_philo = malloc(sizeof(t_philo));
+	if (!d_philo)
+	{
+		free(d_dataP);
+		exit(1);
+	}
+	d_dataP->forks = malloc(sizeof(pthread_mutex_t) * d_dataP->num_philos);
+	if (!d_dataP->forks)
+	{
+		free(d_dataP);
+		free(d_philo);
+		free(d_dataP->forks);
+		exit(1);
+	}
+	int i;
+	i = 0;
+	while (i < d_dataP->num_philos)
+		pthread_mutex_init(&d_dataP->forks[i++], NULL);
+
+	(void)d_philo;
 	return (0);
 }

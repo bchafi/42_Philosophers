@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:09:29 by bader             #+#    #+#             */
-/*   Updated: 2025/03/29 05:11:39 by codespace        ###   ########.fr       */
+/*   Updated: 2025/04/07 13:21:00 by bader            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <limits.h>
+#include <pthread.h>
+
 
 char	**ft_split(char const *s, char c);
 void	ft_puterror_fd(char *s);
@@ -24,6 +27,7 @@ char    *ft_strjoin(char *s1, char *s2);
 int     ft_isdigit(int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s1);
+int     ft_atoi(const char *str);
 
 # include <stdarg.h>
 int     ft_printf(const char *format, ...);
@@ -34,11 +38,31 @@ int     ft_hexadecimal(unsigned int num, char buffer);
 int     ft_hexa_address(unsigned long num);
 
 
-
-
 int     are_valid_argument(char *argv);
 void    check_if_numbers(char **args_sp);
 char    **parcing(char **argv);
 
 
+
+typedef struct args {
+    int num_philos;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int meals_required;
+    long start_time;
+    int someone_died;                                                                                                                                                                                                                                                                                                                                                                                               
+    pthread_mutex_t *forks;
+    pthread_mutex_t print_lock;
+} t_data;
+
+typedef struct philo {
+    int id;
+    int meals_eaten;
+    long last_meal;
+    pthread_t thread;
+    pthread_mutex_t *left_fork;
+    pthread_mutex_t *right_fork;
+    t_data *data;
+} t_philo;
 #endif
