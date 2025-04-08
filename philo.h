@@ -75,7 +75,6 @@ typedef struct philo {
 
 long    get_time_in_ms();
 t_data* init_data(t_data *data, char **args);
-t_data* init_philos(t_data *d_dataP);
-void    half_main(int ac, char **av, t_data *d_dataP);
+void    parc_init(int ac, char **av, t_data *d_dataP);
 
 #endif

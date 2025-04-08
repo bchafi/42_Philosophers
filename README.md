@@ -97,19 +97,19 @@ We now allocate an array of philosophers (t_philo) and assign:
   d_dataP->philos = malloc(sizeof(t_philo) * d_dataP->num_philos);
   if (!d_dataP->philos)
   {
-	free(d_dataP);
-	free(d_dataP->forks);
-	exit(1);
+    free(d_dataP);
+    free(d_dataP->forks);
+    exit(1);
   }
   i = 0;
   while (i < d_dataP->num_philos)
   {
-	d_dataP->philos[i].id = i + 1;
-	d_dataP->philos[i].left_fork = &d_dataP->forks[i];
-	d_dataP->philos[i].right_fork = &d_dataP->forks[(i + 1) % d_dataP->num_philos];
-	d_dataP->philos[i].meals_eaten = 0;
-	d_dataP->philos[i].last_meal = get_time_in_ms();
-	d_dataP->philos[i++].data = d_dataP;
+    d_dataP->philos[i].id = i + 1;
+    d_dataP->philos[i].left_fork = &d_dataP->forks[i];
+    d_dataP->philos[i].right_fork = &d_dataP->forks[(i + 1) % d_dataP->num_philos];
+    d_dataP->philos[i].meals_eaten = 0;
+    d_dataP->philos[i].last_meal = get_time_in_ms();
+    d_dataP->philos[i++].data = d_dataP;
   }
 ```
 🔍 What’s Happening Here?

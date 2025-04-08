@@ -19,42 +19,79 @@ long get_time_in_ms()
     return (time.tv_sec * 1000) + (time.tv_usec / 1000);
 }
 
-t_data *init_data(t_data *data, char **args)
+void new_data(t_data *data, char **args)
 {
-	if (!args)
-	{
-		free(data);
-		data = NULL;
-		ft_puterror_fd("Has No Argument !!");
-	}
-	data->meals_required = -1;
-	data->num_philos = ft_atoi(args[0]);
-	data->time_to_die = ft_atoi(args[1]);
-	data->time_to_eat = ft_atoi(args[2]);
-	data->time_to_sleep = ft_atoi(args[3]);
-	if (args[4])
-		data->meals_required = ft_atoi(args[4]);
-	return (data);
+    data->meals_required = -1;
+    data->num_philos = ft_atoi(args[0]);
+    data->time_to_die = ft_atoi(args[1]);
+    data->time_to_eat = ft_atoi(args[2]);
+    data->time_to_sleep = ft_atoi(args[3]);
+    if (args[4])
+        data->meals_required = ft_atoi(args[4]);
+    data->someone_died = 0;
+    data->start_time = 0;
 }
 
-t_data *init_philos(t_data *d_dataP)
+t_philo *init_philo(t_philo *philo, t_data *data)
 {
 	int i;
 
 	i = 0;
-	while (i < d_dataP->num_philos)
+	if (!philo)
 	{
-		d_dataP->philos[i].id = i + 1;
-		d_dataP->philos[i].left_fork = &d_dataP->forks[i];
-		d_dataP->philos[i].right_fork = &d_dataP->forks[(i + 1) % d_dataP->num_philos];
-		d_dataP->philos[i].meals_eaten = 0;
-		d_dataP->philos[i].last_meal = get_time_in_ms();
-		d_dataP->philos[i++].data = d_dataP;
+		free(data);
+		free(data->forks);
+		exit(1);
 	}
-	return (d_dataP);
+	while (i < data->num_philos)
+	{
+		philo[i].id = i + 1;
+		philo[i].left_fork = &data->forks[i];
+		philo[i].right_fork = &data->forks[(i + 1) % data->num_philos];
+		philo[i].meals_eaten = 0;
+		philo[i].last_meal = get_time_in_ms();
+		philo[i++].data = data;
+	}
+	return (philo);
 }
 
-void half_main(int ac, char **av, t_data *d_dataP)
+t_data *init_data(t_data *data, char **args)
+{
+    int i;
+
+    if (!args || !args[1])
+    {
+        ft_puterror_fd("Arguments are missing!\n");
+        exit(1);
+    }
+    new_data(data, args);
+    if (data->num_philos == 0)
+    {
+        ft_puterror_fd("The number of philosophers is 0!!\n");
+        free(data);
+        exit(1);
+    }
+    data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
+    if (!data->forks)
+    {
+        free(data);
+        exit(1);
+    }
+    while (i < data->num_philos)
+		pthread_mutex_init(&data->forks[i], NULL);
+	pthread_mutex_init(&data->print_lock, NULL);
+    data->philos = malloc(sizeof(t_philo) * data->num_philos);
+    if (!data->philos)
+    {
+        free(data->forks);
+        free(data);
+        exit(1);
+    }
+    return init_philo(data->philos, data);
+}
+
+
+void parc_init(int ac, char **av, t_data *d_dataP)
 {
 	int i;
 
@@ -65,22 +102,4 @@ void half_main(int ac, char **av, t_data *d_dataP)
 	}
 	av = parcing(av);
 	d_dataP = init_data(d_dataP, av);
-	d_dataP->forks = malloc(sizeof(pthread_mutex_t) * d_dataP->num_philos);
-	if (!d_dataP->forks)
-	{
-		free(d_dataP);
-		exit(1);
-	}
-	i = 0;
-	while (i < d_dataP->num_philos)
-		pthread_mutex_init(&d_dataP->forks[i++], NULL);
-	pthread_mutex_init(&d_dataP->print_lock, NULL);
-	d_dataP->philos = malloc(sizeof(t_philo) * d_dataP->num_philos);
-	if (!d_dataP->philos)
-	{
-		free(d_dataP);
-		free(d_dataP->forks);
-		exit(1);
-	}
-	d_dataP = init_philos(d_dataP);
 }
