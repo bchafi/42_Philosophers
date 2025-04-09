@@ -6,24 +6,24 @@
 /*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 11:07:07 by bader             #+#    #+#             */
-/*   Updated: 2025/04/04 15:36:01 by bader            ###   ########.fr       */
+/*   Updated: 2025/04/09 13:09:15 by bader            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-// void free_args_philo(char **args_philo)
-// {
-// 	char **strc = args_philo;
-// 	while (*args_philo)
-// 	{
-// 		free(*args_philo);
-// 		args_philo++;
-// 	}
-// 	free(strc);
-//  strc = NULL;
-// 	return;
-// }
+void free_args_philo(char **args_philo)
+{
+	char **strc = args_philo;
+	while (*args_philo)
+	{
+		free(*args_philo);
+		args_philo++;
+	}
+	free(strc);
+ 	strc = NULL;
+	return;
+}
 
 int are_valid_argument(char *argv)
 {
@@ -88,4 +88,18 @@ char **parcing(char **argv)
 	if (counter <= 3 || counter >= 6)
 		ft_puterror_fd("Error The args is not 4 or 5\n");
 	return (temp_args);
+}
+
+void free_to_exit(char **av, t_data *data)
+{
+	int i;
+
+	free_args_philo(av);
+	i = 0;
+	while (i < data->num_philos)
+		pthread_mutex_destroy(&data->forks[i++]);
+	pthread_mutex_destroy(&data->print_lock);
+	free(data->forks);
+	free(data->philos);
+	free(data);
 }
