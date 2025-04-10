@@ -6,7 +6,7 @@
 /*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:09:29 by bader             #+#    #+#             */
-/*   Updated: 2025/04/09 12:01:00 by bader            ###   ########.fr       */
+/*   Updated: 2025/04/09 17:01:12 by bader            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct args {
     int someone_died;                                                                                                                                                                                                                                                                                                                                                                                               
     pthread_mutex_t *forks;
     pthread_mutex_t print_lock;
+    pthread_mutex_t death_lock;
     t_philo *philos;
 } t_data;
 

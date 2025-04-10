@@ -6,7 +6,7 @@
 /*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:11:20 by bader             #+#    #+#             */
-/*   Updated: 2025/04/09 13:51:23 by bader            ###   ########.fr       */
+/*   Updated: 2025/04/10 01:44:05 by bader            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ t_data *init_data(t_data *data, char **args)
 
     if (args[4])
         data->meals_required = ft_atoi(args[4]);
-
     pthread_mutex_init(&data->print_lock, NULL);
+	pthread_mutex_init(&data->death_lock, NULL);
     data->start_time = get_time_in_ms();
     data->someone_died = 0;
     return data;
@@ -132,13 +132,11 @@ void take_forks(t_philo *philo)
 
 void eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->print_lock);
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->last_meal = get_time_in_ms();
-	printf("%ld %d is eating\n", philo->last_meal - philo->data->start_time, philo->id);
 	pthread_mutex_unlock(&philo->meal_lock);
-	pthread_mutex_unlock(&philo->data->print_lock);
-
+	
+	print_action(philo, "is eating");
 	usleep(philo->data->time_to_eat * 1000);
 	philo->meals_eaten++;
 }
@@ -159,14 +157,34 @@ void *philo_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
 
-    if (philo->id % 2 == 0)
-    {
-        usleep(500);
-    }
+	if (philo->id % 2 == 0)
+	{
+		usleep(200);
+	}
+	if (philo->data->num_philos == 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		print_action(philo, "has taken left fork");
 
+		usleep(philo->data->time_to_die * 1000);
+
+		print_action(philo, "died");
+		pthread_mutex_lock(&philo->data->death_lock);
+		philo->data->someone_died = 1;
+		pthread_mutex_unlock(&philo->data->death_lock);
+
+		pthread_mutex_unlock(philo->left_fork);
+		return NULL;
+	}
     while (!philo->data->someone_died)
     {
-        // Check if the philosopher has died
+		pthread_mutex_lock(&philo->data->death_lock);
+        if (philo->data->someone_died)
+        {
+            pthread_mutex_unlock(&philo->data->death_lock);
+            break;
+        }
+        pthread_mutex_unlock(&philo->data->death_lock);
         long time_since_last_meal = get_time_in_ms() - philo->last_meal;
         if (time_since_last_meal > philo->data->time_to_die)
         {
@@ -176,11 +194,7 @@ void *philo_routine(void *arg)
         }
 
         if (philo->data->meals_required != -1 && philo->meals_eaten >= philo->data->meals_required)
-        {
-            print_action(philo, "has finished eating the required meals");
             break;
-        }
-		
         think(philo);
         take_forks(philo);
         eat(philo);
@@ -214,21 +228,13 @@ int main(int ac, char **av)
     if (!d_dataP)
         exit(1);
     memset(d_dataP, 0, sizeof(t_data));
-
-    printf("Initialize arguments ...\n");
     av = half_main(ac, av, d_dataP);
-
-    printf("Create threads ...\n");
     create_threads(d_dataP);
-
-    // Wait for all philosopher threads to finish
     i = 0;
     while (i < d_dataP->num_philos)
     {
         pthread_join(d_dataP->philos[i++].thread, NULL);
     }
-
-    printf("Cleaning up...\n");
     free_to_exit(av, d_dataP);
     return 0;
 }
