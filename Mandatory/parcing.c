@@ -3,47 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 11:07:07 by bader             #+#    #+#             */
-/*   Updated: 2025/04/09 13:09:15 by bader            ###   ########.fr       */
+/*   Created: 2025/08/10 11:55:25 by bchafi            #+#    #+#             */
+/*   Updated: 2025/08/10 11:58:47 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void free_args_philo(char **args_philo)
-{
-	char **strc = args_philo;
-	while (*args_philo)
-	{
-		free(*args_philo);
-		args_philo++;
-	}
-	free(strc);
- 	strc = NULL;
-	return;
-}
-
-int are_valid_argument(char *argv)
+int	are_valid_argument(char *argv)
 {
 	while (*argv && ft_isspace((unsigned char)*argv))
 		argv++;
 	if (*argv == '\0')
-		ft_puterror_fd("An Argument Is Empty!!\n");
+		return (ft_puterror_fd("An Argument Is Empty!!\n"), 0);
 	while (*argv)
 	{
-		if (ft_isspace((unsigned char)*argv) && *(argv + 1) == '\0' && ft_isspace((unsigned char)*(argv + 1)))
-			ft_puterror_fd("An Argument Is Empty!!\n");
+		if (ft_isspace((unsigned char)*argv) && *(argv + 1) == '\0'
+			&& ft_isspace((unsigned char)*(argv + 1)))
+			return (ft_puterror_fd("An Argument Is Empty!!\n"), 0);
 		argv++;
 	}
 	return (1);
 }
 
-void check_if_numbers(char **args_sp)
+int	check_if_numbers(char **args_sp)
 {
-	char *args;
-	int i;
+	char	*args;
+	int		i;
 
 	i = 0;
 	while (*args_sp)
@@ -55,51 +43,77 @@ void check_if_numbers(char **args_sp)
 			if (ft_isdigit(args[i]))
 				i++;
 			else if (i == 0 && args[i] == '-')
-				ft_puterror_fd("The Argument Is Negative!!\n");
+				return (ft_puterror_fd("The Argument Is Negative!!\n"), 0);
 			else if ((i == 0 && args[i] == '+') && ft_isdigit(args[i + 1]))
 				i++;
 			else
-				ft_puterror_fd("The Argument Is Not A Digit!!\n");
+				return (ft_puterror_fd("The Argument Is Not A Digit!!\n"), 0);
 		}
 		args_sp++;
 	}
+	return (1);
 }
 
-char **parcing(char **argv)
+char	**parcing(char **argv)
 {
-	char    *string;
-	int     counter;
-    char    **temp_args;
+	char	*string;
+	int		counter;
+	char	**temp_args;
 
-	(1) && (temp_args = NULL, counter = 0, argv++, string = NULL);
+	temp_args = NULL;
+	argv++;
+	counter = 0;
+	string = NULL;
 	while (*argv)
 	{
-		are_valid_argument(*argv);
+		if (!are_valid_argument(*argv))
+			return (NULL);
 		string = ft_strjoin(string, *argv);
 		string = ft_strjoin(string, " ");
 		argv++;
 	}
 	argv = ft_split(string, ' ');
-	check_if_numbers(argv);
 	free(string);
-    temp_args = argv;
+	if (!check_if_numbers(argv))
+		return (free_args_philo(argv), argv = NULL, NULL);
+	temp_args = argv;
 	while (*argv++)
 		counter++;
-	if (counter <= 3 || counter >= 6)
-		ft_puterror_fd("Error The args is not 4 or 5\n");
 	return (temp_args);
 }
 
-void free_to_exit(char **av, t_data *data)
+void	free_args_philo(char **args_philo)
 {
-	int i;
+	char	**start;
 
+	start = args_philo;
+	if (!args_philo)
+		return ;
+	while (*args_philo)
+	{
+		free(*args_philo);
+		args_philo++;
+	}
+	free(start);
+}
+
+int	free_to_exit(char **av, t_data *data)
+{
+	int	i;
+
+	i = -1;
 	free_args_philo(av);
-	i = 0;
-	while (i < data->num_philos)
-		pthread_mutex_destroy(&data->forks[i++]);
+	if (data->philos)
+		while (++i < data->num_philos)
+			pthread_mutex_destroy(&data->philos[i].meal_lock);
+	i = -1;
+	if (data->forks)
+		while (++i < data->num_philos)
+			pthread_mutex_destroy(&data->forks[i]);
 	pthread_mutex_destroy(&data->print_lock);
+	pthread_mutex_destroy(&data->death_lock);
 	free(data->forks);
 	free(data->philos);
 	free(data);
+	return (0);
 }

@@ -1,20 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_puterror_fd.c                                   :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bader <bader@student.42.fr>                +#+  +:+       +#+        */
+/*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 00:16:44 by bchafi            #+#    #+#             */
-/*   Updated: 2025/03/25 01:54:52 by bader            ###   ########.fr       */
+/*   Created: 2024/11/08 00:15:41 by bchafi            #+#    #+#             */
+/*   Updated: 2024/11/10 09:27:48 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	ft_puterror_fd(char *s)
+void	*ft_memset(void *b, int c, size_t len)
 {
-	if (!s)
-		return ;
-	write(2, s, ft_strlen(s));
+	unsigned char	*str;
+	unsigned char	set;
+	size_t			i;
+
+	str = (unsigned char *)b;
+	set = (unsigned char)c;
+	i = 0;
+	while (i < len)
+	{
+		str[i] = set;
+		i++;
+	}
+	return (b);
 }
