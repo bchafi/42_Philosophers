@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 00:17:12 by bchafi            #+#    #+#             */
-/*   Updated: 2025/08/11 18:41:49 by bchafi           ###   ########.fr       */
+/*   Created: 2024/11/03 02:41:44 by bchafi            #+#    #+#             */
+/*   Updated: 2025/08/11 18:41:36 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-char	*ft_strdup(const char *s1)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	int		lens1;
-	int		i;
-	char	*dup;
+	size_t	i;
 
-	lens1 = ft_strlen(s1);
 	i = 0;
-	dup = (char *)malloc(lens1 + 1);
-	if (!dup)
-		return (NULL);
-	while (s1[i])
+	while (i < n && (s1[i] != '\0' || s2[i] != '\0'))
 	{
-		dup[i] = s1[i];
+		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 		i++;
 	}
-	dup[i] = '\0';
-	return (dup);
+	return (0);
 }
