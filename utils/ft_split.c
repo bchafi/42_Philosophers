@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 02:07:30 by bader             #+#    #+#             */
-/*   Updated: 2025/08/11 18:41:19 by bchafi           ###   ########.fr       */
+/*   Created: 2025/08/12 15:35:07 by bchafi            #+#    #+#             */
+/*   Updated: 2025/08/12 15:35:10 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,14 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	return (ft_other_split(s, c));
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
 }

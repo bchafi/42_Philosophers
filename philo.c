@@ -6,7 +6,7 @@
 /*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 23:03:54 by bchafi            #+#    #+#             */
-/*   Updated: 2025/08/11 18:30:57 by bchafi           ###   ########.fr       */
+/*   Updated: 2025/08/12 15:35:48 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,12 @@ int	create_threads(t_data *data)
 		if (pthread_create(&data->philos[i].thread, \
 			NULL, &philo_routine, &data->philos[i]))
 		{
+			write(2, "-Failed to create thread for philosopher-\n", 43);
+			pthread_mutex_lock(&data->death_lock);
+			data->someone_died = 1;
+			pthread_mutex_unlock(&data->death_lock);
 			while (--i >= 0)
 				pthread_join(data->philos[i].thread, NULL);
-			write(2, "Failed to create thread for philosopher\n", 41);
 			return (0);
 		}
 		i++;
@@ -38,15 +41,15 @@ int	main(int ac, char **av)
 	int			i;
 	pthread_t	monitor;
 
-	if (ac < 5)
-		return (ft_puterror_fd("Args Under the Must Number\n"), 1);
+	if (ac < 5 || ac > 6)
+		return (ft_puterror_fd("Error Args!!\n"), 1);
 	data_f = malloc(sizeof(t_data));
 	if (!data_f)
 		return (0);
 	ft_memset(data_f, 0, sizeof(t_data));
-	av = initializer(ac, av, data_f);
+	av = initializer(av, data_f);
 	if (!av)
-		return (free(data_f), 1);
+		return (free_to_exit(av, data_f), 1);
 	data_f->start_time = get_time_in_ms();
 	i = -1;
 	while (++i < data_f->num_philos)

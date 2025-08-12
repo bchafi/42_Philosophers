@@ -6,27 +6,19 @@
 #    By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/10 22:55:10 by bchafi            #+#    #+#              #
-#    Updated: 2025/08/11 18:37:55 by bchafi           ###   ########.fr        #
+#    Updated: 2025/08/12 15:32:03 by bchafi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 Green = \033[0;32m
 Reset = \033[0m
-CC = cc -Wall -Wextra -Werror -fsanitize=thread
+CC = cc -Wall -Wextra -Werror
 SOURCES = \
 	philo.c \
-	utils/ft_isdigit.c \
-	utils/ft_isspace.c \
-	utils/ft_puterror_fd.c \
 	utils/ft_split.c \
-	utils/ft_strjoin.c \
-	utils/ft_strlen.c \
-	utils/ft_strdup.c \
-	utils/ft_substr.c \
-	utils/ft_atoi.c \
-	utils/ft_memset.c \
-	utils/ft_strncmp.c \
+	utils/ft_lib.c \
+	utils/ft_function.c \
 	utils/parcing.c \
 	utils/initialize.c \
 	utils/sleeper.c \
@@ -41,7 +33,7 @@ $(NAME): $(OBJECTS)
 	@$(CC) $(OBJECTS) -o $(NAME)
 	@echo "$(Green)--// Make All Is Done!! //--$(Reset)"
 
-%.o: %.c philo.c
+%.o: %.c philo.h
 	@$(CC) -c $< -o $@
 
 clean:

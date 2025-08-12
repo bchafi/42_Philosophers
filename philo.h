@@ -6,7 +6,7 @@
 /*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 11:44:55 by bchafi            #+#    #+#             */
-/*   Updated: 2025/08/11 18:33:50 by bchafi           ###   ########.fr       */
+/*   Updated: 2025/08/12 15:46:39 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,13 @@
 # include <unistd.h>
 # include <limits.h>
 # include <sys/time.h>
-# include <string.h>
 # include <stdio.h>
 
+int		ft_isspace(int c);
+void	ft_puterror_fd(char *s);
 void	*ft_memset(void *b, int c, size_t len);
 char	**parcing(char **argv);
 int		are_valid_argument(char *argv);
-int		ft_isspace(int c);
-void	ft_puterror_fd(char *s);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 char	**ft_split(char const *s, char c);
@@ -79,9 +78,9 @@ void	routine_each_philo(t_philo *philo);
 void	*philo_routine(void *arg);
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	**initializer(int ac, char **av, t_data *d_dataP);
+char	**initializer(char **av, t_data *d_dataP);
 t_data	*init_data(t_data *data, char **args);
-int		ft_atoi(const char *str);
+long	ft_atoi(const char *str);
 
 void	free_args_philo(char **args_philo);
 int		free_to_exit(char **av, t_data *data);

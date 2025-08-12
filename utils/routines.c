@@ -6,7 +6,7 @@
 /*   By: bchafi <bchafi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:22:56 by bchafi            #+#    #+#             */
-/*   Updated: 2025/08/11 18:46:56 by bchafi           ###   ########.fr       */
+/*   Updated: 2025/08/12 15:43:13 by bchafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	check_monitor_philo(t_data *data, int i, int *all_full)
 		return (1);
 	}
 	pthread_mutex_unlock(&data->death_lock);
-	if (data->meals_required != -1 && meals < data->meals_required)
+	if (data->meals_required != -2 && meals < data->meals_required)
 		*all_full = 0;
 	return (0);
 }
@@ -57,7 +57,7 @@ void	*monitor_routine(void *data_ptr)
 			if (check_monitor_philo(data, i, &all_full))
 				return (NULL);
 		}
-		if (data->meals_required != -1 && all_full)
+		if (data->meals_required != -2 && all_full)
 		{
 			pthread_mutex_lock(&data->death_lock);
 			data->someone_died = 1;
