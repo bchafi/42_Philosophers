@@ -8,9 +8,62 @@ You are simulating philosophers sitting at a table:
   - There are **no deadlocks**.
   - The simulation runs **safely with threads**.
 
+
+Here are the typical steps for completing the philosopher project at 42:
+   ### 1. **Understanding the Problem**
+      - Read and understand the dining philosophers problem.
+      - Review the project specifications provided by 42 (usually in a README or subject PDF).
+
+   ### 2. **Environment Setup**
+      - Set up your development environment (usually C language).
+      - Prepare your Makefile and basic project structure.
+
+   ### 3. **Design the Solution**
+      - Decide on how to represent philosophers (threads) and forks (mutexes).
+      - Plan your synchronization strategy to avoid deadlock and starvation.
+
+   ### 4. **Implement Core Structures**
+      - Define the philosopher struct (thread info, state, etc.).
+      - Define fork mutexes and any shared variables (e.g., state trackers).
+
+   ### 5. **Thread Management**
+      - Create threads for each philosopher.
+      - Implement the philosopher lifecycle: thinking, picking up forks, eating, putting down forks, sleeping.
+
+   ### 6. **Synchronization**
+      - Use mutexes to control access to forks.
+      - Implement strategies for deadlock avoidance (e.g., odd/even philosopher picking order, resource hierarchy).
+
+   ### 7. **Logging and Output**
+      - Implement a system to log philosopher actions with timestamps.
+      - Ensure output matches project requirements for clarity and format.
+
+   ### 8. **Edge Case Handling**
+      - Handle special cases (e.g., only one philosopher, timing issues).
+      - Ensure philosophers don’t starve or the program doesn’t deadlock.
+
+   ### 9. **Testing**
+      - Test your program under different scenarios (varied philosopher counts, timing values).
+      - Check for race conditions and deadlocks.
+
+   ### 10. **Code Review and Refactoring**
+      - Review code for readability, efficiency, and compliance with 42’s norms.
+      - Refactor as needed.
+
+   ### 11. **Documentation**
+      - Write or update your README.
+      - Document functions and key logic in comments.
+
+   ### 12. **Final Checks**
+      - Ensure your Makefile builds the project cleanly.
+      - Double-check output format and project requirements.
+
+   ### 13. **Submission**
+      - Submit the project according to 42 guidelines.
+      - Prepare for peer review or defense.
+      
 ---
 ## ✅ **Step-by-Step Plan**
----
 
 ### 🟦 STEP 1: Parsing the Input
 You already did this. ✅  
@@ -347,111 +400,5 @@ For example:
 - Writing the eat/thinking/sleep logic  
 - How to track time and detect death  
 
-Let me know where you'd like to zoom in 🔍
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Here are the typical steps for completing the philosopher project at 42:
-
-### 1. **Understanding the Problem**
-   - Read and understand the dining philosophers problem.
-   - Review the project specifications provided by 42 (usually in a README or subject PDF).
-
-### 2. **Environment Setup**
-   - Set up your development environment (usually C language).
-   - Prepare your Makefile and basic project structure.
-
-### 3. **Design the Solution**
-   - Decide on how to represent philosophers (threads) and forks (mutexes).
-   - Plan your synchronization strategy to avoid deadlock and starvation.
-
-### 4. **Implement Core Structures**
-   - Define the philosopher struct (thread info, state, etc.).
-   - Define fork mutexes and any shared variables (e.g., state trackers).
-
-### 5. **Thread Management**
-   - Create threads for each philosopher.
-   - Implement the philosopher lifecycle: thinking, picking up forks, eating, putting down forks, sleeping.
-
-### 6. **Synchronization**
-   - Use mutexes to control access to forks.
-   - Implement strategies for deadlock avoidance (e.g., odd/even philosopher picking order, resource hierarchy).
-
-### 7. **Logging and Output**
-   - Implement a system to log philosopher actions with timestamps.
-   - Ensure output matches project requirements for clarity and format.
-
-### 8. **Edge Case Handling**
-   - Handle special cases (e.g., only one philosopher, timing issues).
-   - Ensure philosophers don’t starve or the program doesn’t deadlock.
-
-### 9. **Testing**
-   - Test your program under different scenarios (varied philosopher counts, timing values).
-   - Check for race conditions and deadlocks.
-
-### 10. **Code Review and Refactoring**
-   - Review code for readability, efficiency, and compliance with 42’s norms.
-   - Refactor as needed.
-
-### 11. **Documentation**
-   - Write or update your README.
-   - Document functions and key logic in comments.
-
-### 12. **Final Checks**
-   - Ensure your Makefile builds the project cleanly.
-   - Double-check output format and project requirements.
-
-### 13. **Submission**
-   - Submit the project according to 42 guidelines.
-   - Prepare for peer review or defense.
 
 If you’d like a template for your README or implementation tips for any step, let me know!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
